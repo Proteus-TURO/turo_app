@@ -1,3 +1,4 @@
+import 'package:appui/Controller.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 import 'Configure.dart';
@@ -86,7 +87,7 @@ class _MyAppState extends State<ConnectWlan> {
             height: currentHeight / 19,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
               },
               child: Text(
                 'Connect',

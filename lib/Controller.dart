@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_joystick/flutter_joystick.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
+import 'package:appui/Configure.dart';
+import 'package:appui/AutoDriving.dart';
 
 void main() {
   runApp(const JoystickExampleApp());
@@ -54,44 +56,22 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Joystick'),
+        title: const Text(''),
         actions: [
-          DropdownButton<String>(
-            value: _streetColor,
-            items: <String>['Black', 'White', 'Green', 'Blue', 'Yellow', 'Red'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                _streetColor = newValue;
-              });
-            },
-            hint: Text('Street'),
-          ),
-          DropdownButton<String>(
-            value: _lineColor,
-            items: <String>['Black', 'White', 'Green', 'Blue', 'Yellow', 'Red'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                _lineColor = newValue;
-              });
-            },
-            hint: Text('Driving line'),
-          ),
-          JoystickModeDropdown(
-            mode: _joystickMode,
-            onChanged: (JoystickMode value) {
-              setState(() {
-                _joystickMode = value;
-              });
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(child: Text('Settings'), value: 1),
+              PopupMenuItem(child: Text('Automatic driving'), value: 2),
+              PopupMenuItem(child: Text('Convoy'), value: 3),
+            ],
+            onSelected: (value) {
+              if (value == 1) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
+              } else if (value == 2) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AutoDriving()));
+              } else {
+                print("To be continued");
+              }
             },
           ),
         ],

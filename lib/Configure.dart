@@ -58,7 +58,7 @@ class _ConfigureState extends State<Configure> {
                   },
               child:
               Text(
-                'Connect',
+                'Save',
                 style: TextStyle(
                   shadows: [],
                   color: const Color(
