@@ -56,6 +56,7 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        backgroundColor: Color(0xAF24BEA5),
         title: const Text(''),
         actions: [
           PopupMenuButton(

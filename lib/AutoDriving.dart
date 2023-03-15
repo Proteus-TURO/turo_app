@@ -29,7 +29,7 @@ class _AutoDrivingState extends State<AutoDriving> {
       backgroundColor: Colors.black26,
       appBar: AppBar(
         title: const Text(''),
-        backgroundColor: Color(0xFF24BEA5),
+        backgroundColor: Color(0xAF24BEA5),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
@@ -59,9 +59,12 @@ class _AutoDrivingState extends State<AutoDriving> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
               },
               child: Text('S T O P'),
+
               style: ElevatedButton.styleFrom(
                 primary: Colors.red,
                 shape: CircleBorder(),
+                fixedSize: Size(currentWidth / 2, currentWidth / 2),
+                textStyle: TextStyle(fontSize: 30),
               ),
             ),
           ],

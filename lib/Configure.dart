@@ -33,6 +33,28 @@ class _ConfigureState extends State<Configure> {
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(''),
+        backgroundColor: Color(0xAF24BEA5),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(child: Text('Settings'), value: 1),
+              PopupMenuItem(child: Text('Normal driving'), value: 2),
+              PopupMenuItem(child: Text('Convoy'), value: 3),
+            ],
+            onSelected: (value) {
+              if (value == 1) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
+              } else if (value == 2) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+              } else {
+                print("To be continued");
+              }
+            },
+          ),
+        ],
+      ),
       body: Stack(
         fit: StackFit.expand,
         alignment: const Alignment(0, 0,
