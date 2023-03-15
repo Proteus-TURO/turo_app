@@ -18,10 +18,7 @@ class _ConfigureState extends State<Configure> {
   @override
   void initState() {
   super.initState();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+
   // Initialisieren Sie die Variablen mit einem Standardwert oder null
   _streetColor = null;
   _lineColor = null;
@@ -32,8 +29,15 @@ class _ConfigureState extends State<Configure> {
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
+
+    // Force Protrait mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(''),
         backgroundColor: Color(0xAF24BEA5),
         actions: [

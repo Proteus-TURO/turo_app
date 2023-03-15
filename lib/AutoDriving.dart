@@ -15,16 +15,20 @@ class _AutoDrivingState extends State<AutoDriving> {
   void initState() {
     super.initState();
     // Set the portrait mode here
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown
-    ]);
+
   }
 
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
+
+    // Force Protrait mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+
     return Scaffold(
       backgroundColor: Colors.black26,
       appBar: AppBar(

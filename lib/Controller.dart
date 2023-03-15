@@ -17,6 +17,8 @@ class JoystickExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // Force Landscape mode
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight
@@ -83,11 +85,11 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
             Expanded( // use an Expanded widget to fill the available space
               child: JoystickArea(
                 mode: JoystickMode.all, // set the mode to vertical so that the joystick can only move up and down
-                initialJoystickAlignment: const Alignment(-0.8, -0.8), // set the initial alignment of the joystick to the bottom left corner
+                initialJoystickAlignment: const Alignment(-0.8, 0.4), // set the initial alignment of the joystick to the bottom left corner
                 listener: (details) {
                   setState(() {
                     // adjust the y value according to the left joystick
-                    _y = max(0, min(_y + step * details.y * sin(pi / 4), MediaQuery.of(context).size.height));
+                    _x = max(0, min(_x + step * details.x * cos(pi / 4), MediaQuery.of(context).size.width));
                   });
                 },
                 child: Container(
@@ -98,11 +100,11 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
             Expanded( // use another Expanded widget to fill the remaining space
               child: JoystickArea( // use another JoystickArea widget for the right part of the screen
                 mode: JoystickMode.horizontal, // set the mode to horizontal so that the joystick can only move left and right
-                initialJoystickAlignment: const Alignment(0.8, -0.8), // set the initial alignment of the joystick to the bottom right corner
+                initialJoystickAlignment: const Alignment(0.8, 0.4), // set the initial alignment of the joystick to the bottom right corner
                 listener: (details) {
                   setState(() {
                     // adjust the x value according to the right joystick
-                    _x = max(0, min(_x + step * details.x * cos(pi / 4), MediaQuery.of(context).size.width));
+                    _y = max(0, min(_y + step * details.y * sin(pi / 4), MediaQuery.of(context).size.height));
                   });
                 },
                 child: Container(
