@@ -1,0 +1,3 @@
+[submodule "core_lib"]
+	path = core_lib
+	url = git@github.com:Proteus-TURO/turo_core.git
