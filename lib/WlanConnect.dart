@@ -108,17 +108,24 @@ class _MyAppState extends State<ConnectWlan> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  width: currentWidth,
+              children: <Widget>[
+                SizedBox(
                   height: currentHeight / 3,
-                  child: Image(
-                    image: const AssetImage(
-                      'assets/ProteusBack.png',
-                    ),
-                    fit: BoxFit.cover,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        width: currentWidth,
+                        height: currentHeight / 3,
+                        child: const Image(
+                          image: AssetImage(
+                            'assets/ProteusBack.png',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
