@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:appui/Configure.dart';
 import 'package:appui/AutoDriving.dart';
+import 'package:turo_core/turo_core.dart';
 
 void main() {
   runApp(const JoystickExampleApp());
@@ -40,12 +41,9 @@ class TwoJoystickAreaExample extends StatefulWidget {
 }
 
 class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
-  String? _streetColor = null;
-  String? _lineColor = null;
-  String? _busStopLineColor = null;
+  final RosBridge rb = RosBridge('192.168.3.167', 5000);
   double _x = 100;
   double _y = 100;
-  JoystickMode _joystickMode = JoystickMode.all;
 
   @override
   void didChangeDependencies() {
@@ -55,6 +53,9 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+    final currentHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -84,12 +85,14 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
           children: [
             Expanded( // use an Expanded widget to fill the available space
               child: JoystickArea(
-                mode: JoystickMode.all, // set the mode to vertical so that the joystick can only move up and down
+                mode: JoystickMode.all, // set the mode to all so that the joystick can move in every direction
                 initialJoystickAlignment: const Alignment(-0.8, 0.4), // set the initial alignment of the joystick to the bottom left corner
                 listener: (details) {
                   setState(() {
                     // adjust the y value according to the left joystick
-                    _x = max(0, min(_x + step * details.x * cos(pi / 4), MediaQuery.of(context).size.width));
+
+                    _y = max(0, min(_y + step * details.y * sin(pi / 4), MediaQuery.of(context).size.height));
+                    print('Left Joystick $_y');
                   });
                 },
                 child: Container(
@@ -97,6 +100,7 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
                 ),
               ),
             ),
+            VideoStream('10.10.30.119', 5000, 'video_feed', height: currentHeight / 2, width: currentWidth / 4),
             Expanded( // use another Expanded widget to fill the remaining space
               child: JoystickArea( // use another JoystickArea widget for the right part of the screen
                 mode: JoystickMode.horizontal, // set the mode to horizontal so that the joystick can only move left and right
@@ -104,7 +108,7 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
                 listener: (details) {
                   setState(() {
                     // adjust the x value according to the right joystick
-                    _y = max(0, min(_y + step * details.y * sin(pi / 4), MediaQuery.of(context).size.height));
+                    _x = max(0, min(_x + step * details.x * cos(pi / 4), MediaQuery.of(context).size.width));
                   });
                 },
                 child: Container(

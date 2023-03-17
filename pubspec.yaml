@@ -34,6 +34,9 @@ dependencies:
   connectivity: ^3.0.6
   wifi_iot: ^0.3.9
   flutter_joystick: ^0.0.3
+  wifi_scan: ^0.4.0+1
+  turo_core:
+    path: I:\AndroidStudioProjects\turo_core-master
 
 
   # The following adds the Cupertino Icons font to your application.

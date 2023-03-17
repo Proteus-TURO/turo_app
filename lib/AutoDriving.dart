@@ -32,6 +32,7 @@ class _AutoDrivingState extends State<AutoDriving> {
     return Scaffold(
       backgroundColor: Colors.black26,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(''),
         backgroundColor: Color(0xAF24BEA5),
         actions: [

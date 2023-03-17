@@ -1,24 +1,26 @@
-import 'package:appui/Controller.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:wifi_scan/wifi_scan.dart';
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:wifi_scan/wifi_scan.dart';
 
-/// Example app for wifi_scan plugin.
-class ConnectWlan extends StatefulWidget {
-  /// Default constructor for [MyApp] widget.
-  const ConnectWlan({Key? key}) : super(key: key);
-
-  @override
-  State<ConnectWlan> createState() => _MyAppState();
+void main() {
+  runApp(const MyApp());
 }
 
-class _MyAppState extends State<ConnectWlan> {
+/// Example app for wifi_scan plugin.
+class MyApp extends StatefulWidget {
+  /// Default constructor for [MyApp] widget.
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   List<WiFiAccessPoint> accessPoints = <WiFiAccessPoint>[];
   StreamSubscription<List<WiFiAccessPoint>>? subscription;
   bool shouldCheckCan = true;
-
 
   bool get isStreaming => subscription != null;
 
@@ -98,47 +100,44 @@ class _MyAppState extends State<ConnectWlan> {
 
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
-    final currentHeight = MediaQuery.of(context).size.height;
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+          actions: [
+            _buildToggle(
+                label: "Check can?",
+                value: shouldCheckCan,
+                onChanged: (v) => setState(() => shouldCheckCan = v),
+                activeColor: Colors.purple)
+          ],
+        ),
         body: Builder(
           builder: (context) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  width: currentWidth,
-                  height: currentHeight / 3,
-                  child: Image(
-                    image: const AssetImage(
-                      'assets/ProteusBack.png',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton.icon(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.black),
-                      ),
-                      icon: const Icon(Icons.account_tree_sharp),
-                      label: const Text('CONNECT'),
-                      onPressed: () async => Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp())),
+                      icon: const Icon(Icons.perm_scan_wifi),
+                      label: const Text('SCAN'),
+                      onPressed: () async => _startScan(context),
                     ),
                     ElevatedButton.icon(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.black),
-                      ),
                       icon: const Icon(Icons.refresh),
-                      label: const Text('LOAD'),
+                      label: const Text('GET'),
                       onPressed: () async => _getScannedResults(context),
+                    ),
+                    _buildToggle(
+                      label: "STREAM",
+                      value: isStreaming,
+                      onChanged: (shouldStream) async => shouldStream
+                          ? await _startListeningToScanResults(context)
+                          : _stopListeningToScanResults(),
                     ),
                   ],
                 ),
@@ -156,9 +155,6 @@ class _MyAppState extends State<ConnectWlan> {
               ],
             ),
           ),
-        ),
-        backgroundColor: const Color(
-          0xFF42BEA5,
         ),
       ),
     );
