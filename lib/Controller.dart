@@ -1,3 +1,4 @@
+import 'package:appui/WlanConnect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_joystick/flutter_joystick.dart';
 import 'dart:math';
@@ -66,13 +67,16 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
             itemBuilder: (context) => [
               PopupMenuItem(child: Text('Settings'), value: 1),
               PopupMenuItem(child: Text('Automatic driving'), value: 2),
-              PopupMenuItem(child: Text('Convoy'), value: 3),
+              PopupMenuItem(child: Text('Wlan'), value: 3),
+              PopupMenuItem(child: Text('Convoy'), value: 4),
             ],
             onSelected: (value) {
               if (value == 1) {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
               } else if (value == 2) {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => AutoDriving()));
+              } else if (value == 3) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
               } else {
                 print("To be continued");
               }

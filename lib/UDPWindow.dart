@@ -3,12 +3,12 @@ import 'package:flutter/services.dart';
 import 'Controller.dart';
 import 'test.dart';
 
-class MyHomePage extends StatefulWidget {
+class UDPWindow extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _UDPWindowState createState() => _UDPWindowState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _UDPWindowState extends State<UDPWindow> {
 
   @override
   void initState() {

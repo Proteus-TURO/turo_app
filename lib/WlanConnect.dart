@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'Configure.dart';
 
 /// Example app for wifi_scan plugin.
 class ConnectWlan extends StatefulWidget {
@@ -100,8 +101,40 @@ class _MyAppState extends State<ConnectWlan> {
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text(''),
+          backgroundColor: Color(0xAF24BEA5),
+          actions: [
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(child: Text('Settings'), value: 1),
+                PopupMenuItem(child: Text('Normal driving'), value: 2),
+                PopupMenuItem(child: Text('Wlan'), value: 3),
+                PopupMenuItem(child: Text('Convoy'), value: 4),
+              ],
+              onSelected: (value) {
+                if (value == 1) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
+                } else if (value == 2) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+                } else if (value == 3) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
+                } else {
+                  print("To be continued");
+                }
+              },
+            ),
+          ],
+        ),
         body: Builder(
           builder: (context) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),

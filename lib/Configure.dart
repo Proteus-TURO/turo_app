@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Controller.dart';
 import 'package:flutter/services.dart';
+import 'WlanConnect.dart';
 
 class Configure extends StatefulWidget {
   const Configure({Key? key}) : super(key: key);
@@ -45,13 +46,16 @@ class _ConfigureState extends State<Configure> {
             itemBuilder: (context) => [
               PopupMenuItem(child: Text('Settings'), value: 1),
               PopupMenuItem(child: Text('Normal driving'), value: 2),
-              PopupMenuItem(child: Text('Convoy'), value: 3),
+              PopupMenuItem(child: Text('Wlan'), value: 3),
+              PopupMenuItem(child: Text('Convoy'), value: 4),
             ],
             onSelected: (value) {
               if (value == 1) {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
               } else if (value == 2) {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+              } else if (value == 3) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
               } else {
                 print("To be continued");
               }
