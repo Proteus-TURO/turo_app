@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:turo_core/turo_core.dart';
 import 'Controller.dart';
-import 'test.dart';
 
-class UDPWindow extends StatefulWidget {
-  @override
-  _UDPWindowState createState() => _UDPWindowState();
+void printCar(HeloTuroData car) {
+  print(car.name);
+  final _ros = RosBridge(car.ip, car.bridgePort);
+
 }
 
-class _UDPWindowState extends State<UDPWindow> {
+class UDPWindow extends StatelessWidget {
+  const UDPWindow({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Turo',
+      home: UDP(title: 'Turo'),
+    );
+  }
+}
+
+class UDP extends StatefulWidget {
+  const UDP({super.key, required this.title});
+  final String title;
+
+  @override
+  State<UDP> createState() => _UDPState();
+}
+
+class _UDPState extends State<UDP> {
   @override
   void initState() {
     super.initState();
@@ -34,28 +54,36 @@ class _UDPWindowState extends State<UDPWindow> {
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: Colors.black26,
+      appBar: AppBar(
+        backgroundColor: const Color(0xAF24BEA5),
+      ),
+      backgroundColor: const Color(0xFF24BEA5),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: currentHeight / 4),
-            Image.asset(
-              'assets/ProteusLogo.png',
-              width: currentWidth / 2,
-              height: currentHeight / 4,
+          children: <Widget>[
+            SizedBox(
+              width: currentWidth,
+              height: currentHeight / 3,
+              child: const Image(
+                image: AssetImage(
+                  'assets/ProteusBack.png',
+                ),
+              ),
             ),
-            SizedBox(height: currentHeight / 5),
+            const Expanded(child:
+            HeloTuroReceiver(printCar),
+            ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const JoystickView()));
               },
-              child: Text('Start driving'),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xFF42BEA5)),
+                backgroundColor: MaterialStateProperty.all(Colors.black),
                 minimumSize: MaterialStateProperty.all(Size(currentWidth / 2, currentHeight / 17)),
               ),
+              child: const Text('Start driving'),
             ),
           ],
         ),

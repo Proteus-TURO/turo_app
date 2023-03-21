@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'Controller.dart';
+import 'UDPWindow.dart';
 import 'test.dart';
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -49,13 +51,13 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: currentHeight / 5),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const UDPWindow()));
               },
-              child: Text('Start driving'),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xFF42BEA5)),
+                backgroundColor: MaterialStateProperty.all(const Color(0xFF42BEA5)),
                 minimumSize: MaterialStateProperty.all(Size(currentWidth / 2, currentHeight / 17)),
               ),
+              child: const Text('Search car'),
             ),
           ],
         ),

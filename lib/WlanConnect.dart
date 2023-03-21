@@ -20,26 +20,26 @@ class _MyAppState extends State<ConnectWlan> {
   StreamSubscription<List<WiFiAccessPoint>>? subscription;
   bool shouldCheckCan = true;
 
-
   bool get isStreaming => subscription != null;
 
-  Future<void> _startScan(BuildContext context) async {
-    // check if "can" startScan
-    if (shouldCheckCan) {
-      // check if can-startScan
-      final can = await WiFiScan.instance.canStartScan();
-      // if can-not, then show error
-      if (can != CanStartScan.yes) {
-        if (mounted) kShowSnackBar(context, "Cannot start scan: $can");
-        return;
-      }
-    }
+  @override
+  void initState() {
+    super.initState();
+    // Set the portrait mode here
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+  }
 
-    // call startScan API
-    final result = await WiFiScan.instance.startScan();
-    if (mounted) kShowSnackBar(context, "startScan: $result");
-    // reset access points.
-    setState(() => accessPoints = <WiFiAccessPoint>[]);
+  @override
+  void dispose() {
+    super.dispose();
+    // Release the portrait mode here
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
   }
 
   Future<bool> _canGetScannedResults(BuildContext context) async {
@@ -64,39 +64,6 @@ class _MyAppState extends State<ConnectWlan> {
     }
   }
 
-  Future<void> _startListeningToScanResults(BuildContext context) async {
-    if (await _canGetScannedResults(context)) {
-      subscription = WiFiScan.instance.onScannedResultsAvailable
-          .listen((result) => setState(() => accessPoints = result));
-    }
-  }
-
-  void _stopListeningToScanResults() {
-    subscription?.cancel();
-    setState(() => subscription = null);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    // stop subscription for scanned results
-    _stopListeningToScanResults();
-  }
-
-  // build toggle with label
-  Widget _buildToggle({
-    String? label,
-    bool value = false,
-    ValueChanged<bool>? onChanged,
-    Color? activeColor,
-  }) =>
-      Row(
-        children: [
-          if (label != null) Text(label),
-          Switch(value: value, onChanged: onChanged, activeColor: activeColor),
-        ],
-      );
-
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
@@ -112,24 +79,26 @@ class _MyAppState extends State<ConnectWlan> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text(''),
-          backgroundColor: Color(0xAF24BEA5),
+          backgroundColor: const Color(0xAF24BEA5),
           actions: [
             PopupMenuButton(
               itemBuilder: (context) => [
-                PopupMenuItem(child: Text('Settings'), value: 1),
-                PopupMenuItem(child: Text('Normal driving'), value: 2),
-                PopupMenuItem(child: Text('Wlan'), value: 3),
-                PopupMenuItem(child: Text('Convoy'), value: 4),
+                const PopupMenuItem(value: 1, child: Text('Settings')),
+                const PopupMenuItem(value: 2, child: Text('Normal driving')),
+                const PopupMenuItem(value: 3, child: Text('Wlan')),
+                const PopupMenuItem(value: 4, child: Text('Convoy')),
               ],
               onSelected: (value) {
                 if (value == 1) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const Configure()));
                 } else if (value == 2) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const JoystickView()));
                 } else if (value == 3) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ConnectWlan()));
                 } else {
-                  print("To be continued");
+                  if (kDebugMode) {
+                    print("To be continued");
+                  }
                 }
               },
             ),
@@ -170,7 +139,7 @@ class _MyAppState extends State<ConnectWlan> {
                       ),
                       icon: const Icon(Icons.account_tree_sharp),
                       label: const Text('CONNECT'),
-                      onPressed: () async => Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp())),
+                      onPressed: () async => Navigator.push(context, MaterialPageRoute(builder: (context) => const JoystickView())),
                     ),
                     ElevatedButton.icon(
                       style: ButtonStyle(

@@ -8,41 +8,54 @@ import 'package:appui/AutoDriving.dart';
 import 'package:turo_core/turo_core.dart';
 
 void main() {
-  runApp(const JoystickExampleApp());
+  runApp(const JoystickView());
 }
 
 const ballSize = 20.0;
 const step = 10.0;
 
-class JoystickExampleApp extends StatelessWidget {
-  const JoystickExampleApp({Key? key}) : super(key: key);
+class JoystickView extends StatelessWidget {
+  const JoystickView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    // Force Landscape mode
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight
-    ]);
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
-        body: const TwoJoystickAreaExample(),
+        body: TwoJoystick(),
       ),
     );
   }
 }
 
 
-class TwoJoystickAreaExample extends StatefulWidget {
-  const TwoJoystickAreaExample({Key? key}) : super(key: key);
+class TwoJoystick extends StatefulWidget {
+  const TwoJoystick({Key? key}) : super(key: key);
 
   @override
-  _TwoJoystickAreaExampleState createState() => _TwoJoystickAreaExampleState();
+  _TwoJoystickState createState() => _TwoJoystickState();
 }
 
-class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
-  final RosBridge rb = RosBridge('192.168.3.167', 5000);
+class _TwoJoystickState extends State<TwoJoystick> {
+  @override
+  void initState() {
+    super.initState();
+    // Force Landscape mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight
+    ]);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // Release Landscape mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight
+    ]);
+  }
+
   double _x = 100;
   double _y = 100;
 
@@ -60,23 +73,23 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Color(0xAF24BEA5),
+        backgroundColor: const Color(0xAF24BEA5),
         title: const Text(''),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
-              PopupMenuItem(child: Text('Settings'), value: 1),
-              PopupMenuItem(child: Text('Automatic driving'), value: 2),
-              PopupMenuItem(child: Text('Wlan'), value: 3),
-              PopupMenuItem(child: Text('Convoy'), value: 4),
+              const PopupMenuItem(value: 1, child: Text('Settings')),
+              const PopupMenuItem(value: 2, child: Text('Automatic driving')),
+              const PopupMenuItem(value: 3, child: Text('Wlan')),
+              const PopupMenuItem(value: 4, child: Text('Convoy')),
             ],
             onSelected: (value) {
               if (value == 1) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Configure()));
               } else if (value == 2) {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => AutoDriving()));
               } else if (value == 3) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ConnectWlan()));
               } else {
                 print("To be continued");
               }
@@ -104,7 +117,7 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
                 ),
               ),
             ),
-            VideoStream('10.10.30.119', 5000, 'video_feed', height: currentHeight / 2, width: currentWidth / 4),
+            VideoStream('10.10.30.119', 5000, 'video_feed', '/camera/color/image_raw', height: currentHeight / 2, width: currentWidth / 4),
             Expanded( // use another Expanded widget to fill the remaining space
               child: JoystickArea( // use another JoystickArea widget for the right part of the screen
                 mode: JoystickMode.horizontal, // set the mode to horizontal so that the joystick can only move left and right
@@ -127,43 +140,4 @@ class _TwoJoystickAreaExampleState extends State<TwoJoystickAreaExample> {
   }
 }
 
-
-
-class JoystickModeDropdown extends StatelessWidget {
-  final JoystickMode mode;
-  final ValueChanged<JoystickMode> onChanged;
-
-  const JoystickModeDropdown(
-      {Key? key, required this.mode, required this.onChanged})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 150,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16.0),
-        child: FittedBox(
-          child: DropdownButton(
-            value: mode,
-            onChanged: (v) {
-              onChanged(v as JoystickMode);
-            },
-            items: const [
-              DropdownMenuItem(
-                  child: Text('All Directions'), value: JoystickMode.all),
-              DropdownMenuItem(
-                  child: Text('Vertical And Horizontal'),
-                  value: JoystickMode.horizontalAndVertical),
-              DropdownMenuItem(
-                  child: Text('Horizontal'), value: JoystickMode.horizontal),
-              DropdownMenuItem(
-                  child: Text('Vertical'), value: JoystickMode.vertical),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 

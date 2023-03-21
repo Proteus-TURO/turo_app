@@ -15,7 +15,20 @@ class _AutoDrivingState extends State<AutoDriving> {
   void initState() {
     super.initState();
     // Set the portrait mode here
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+  }
 
+  @override
+  void dispose() {
+    super.dispose();
+    // Release the portrait mode here
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
   }
 
   @override
@@ -34,22 +47,22 @@ class _AutoDrivingState extends State<AutoDriving> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(''),
-        backgroundColor: Color(0xAF24BEA5),
+        backgroundColor: const Color(0xAF24BEA5),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
-              PopupMenuItem(child: Text('Settings'), value: 1),
-              PopupMenuItem(child: Text('Normal driving'), value: 2),
-              PopupMenuItem(child: Text('Wlan'), value: 3),
-              PopupMenuItem(child: Text('Convoy'), value: 4),
+              const PopupMenuItem(value: 1, child: Text('Settings')),
+              const PopupMenuItem(value: 2, child: Text('Normal driving')),
+              const PopupMenuItem(value: 3, child: Text('Wlan')),
+              const PopupMenuItem(value: 4, child: Text('Convoy')),
             ],
             onSelected: (value) {
               if (value == 1) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Configure()));
               } else if (value == 2) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const JoystickView()));
               } else if (value == 3) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ConnectWlan()));
               } else {
                 print("To be continued");
               }
@@ -64,16 +77,16 @@ class _AutoDrivingState extends State<AutoDriving> {
             SizedBox(height: currentHeight / 5),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ConnectWlan()));
               },
-              child: Text('S T O P'),
 
               style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-                shape: CircleBorder(),
+                backgroundColor: Colors.red,
+                shape: const CircleBorder(),
                 fixedSize: Size(currentWidth / 2, currentWidth / 2),
-                textStyle: TextStyle(fontSize: 30),
+                textStyle: const TextStyle(fontSize: 30),
               ),
+              child: const Text('S T O P'),
             ),
           ],
         ),

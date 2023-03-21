@@ -20,10 +20,26 @@ class _ConfigureState extends State<Configure> {
   void initState() {
   super.initState();
 
+  // Set portrait mode here
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
+
   // Initialisieren Sie die Variablen mit einem Standardwert oder null
   _streetColor = null;
   _lineColor = null;
   _busStopLineColor = null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // Release the portrait mode here
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
   }
 
   @override
@@ -40,22 +56,22 @@ class _ConfigureState extends State<Configure> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(''),
-        backgroundColor: Color(0xAF24BEA5),
+        backgroundColor: const Color(0xAF24BEA5),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
-              PopupMenuItem(child: Text('Settings'), value: 1),
-              PopupMenuItem(child: Text('Normal driving'), value: 2),
-              PopupMenuItem(child: Text('Wlan'), value: 3),
-              PopupMenuItem(child: Text('Convoy'), value: 4),
+              const PopupMenuItem(value: 1, child: Text('Settings')),
+              const PopupMenuItem(value: 2, child: Text('Normal driving')),
+              const PopupMenuItem(value: 3, child: Text('Wlan')),
+              const PopupMenuItem(value: 4, child: Text('Convoy')),
             ],
             onSelected: (value) {
               if (value == 1) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Configure()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Configure()));
               } else if (value == 2) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const JoystickView()));
               } else if (value == 3) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectWlan()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ConnectWlan()));
               } else {
                 print("To be continued");
               }
@@ -84,23 +100,23 @@ class _ConfigureState extends State<Configure> {
             height: currentHeight / 19,
             child: ElevatedButton(
               onPressed: _streetColor == null || _lineColor == null || _busStopLineColor == null ? null : () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => JoystickExampleApp()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const JoystickView()));
                   },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.black),
+              ),
               child:
-              Text(
+              const Text(
                 'Save',
                 style: TextStyle(
                   shadows: [],
-                  color: const Color(
+                  color: Color(
                     0xFFFFFFFF,
                   ),
-                  backgroundColor: const Color(
-                    0,
+                  backgroundColor: Color(
+                    0x00000000,
                   ),
                 ),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.black),
               ),
             ),
           ),
@@ -109,8 +125,8 @@ class _ConfigureState extends State<Configure> {
             left: 0,
             width: currentWidth,
             height: currentHeight / 3,
-            child: Image(
-              image: const AssetImage(
+            child: const Image(
+              image: AssetImage(
                 'assets/ProteusBack.png',
               ),
               fit: BoxFit.cover,
@@ -132,7 +148,7 @@ class _ConfigureState extends State<Configure> {
                   _streetColor = newValue; // Aktualisieren Sie den Wert bei Änderung
                 });
               },
-              hint: Text('Street'), // Der passive Text zum Anzeigen
+              hint: const Text('Street'), // Der passive Text zum Anzeigen
             ),
           ),
           Positioned(
@@ -151,7 +167,7 @@ class _ConfigureState extends State<Configure> {
                   _lineColor = newValue; // Aktualisieren Sie den Wert bei Änderung
                 });
               },
-              hint: Text('Driving line'), // Der passive Text zum Anzeigen
+              hint: const Text('Driving line'), // Der passive Text zum Anzeigen
             ),
           ),
           Positioned(
@@ -170,7 +186,7 @@ class _ConfigureState extends State<Configure> {
                   _busStopLineColor = newValue; // Aktualisieren Sie den Wert bei Änderung
                 });
               },
-              hint :Text('Bus stop line'), // Der passive Text zum Anzeigen
+              hint :const Text('Bus stop line'), // Der passive Text zum Anzeigen
             ),
           ),
         ],
