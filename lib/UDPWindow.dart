@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:turo_core/turo_core.dart';
 import 'Controller.dart';
+import 'dart:io';
+import 'dart:convert';
 
-void printCar(HeloTuroData car) {
+Future<void> printCar(HeloTuroData car) async {
   print(car.name);
   final _ros = RosBridge(car.ip, car.bridgePort);
+  final data = {
+    'ip': car.ip,
+    'bridgePort': car.bridgePort,
+    'name': car.name,
+  };
 
+  final file = File('data.json');
+  file.writeAsStringSync(json.encode(data));
 }
 
 class UDPWindow extends StatelessWidget {

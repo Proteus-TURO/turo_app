@@ -35,6 +35,7 @@ dependencies:
   wifi_iot: ^0.3.9
   flutter_joystick: ^0.0.3
   wifi_scan: ^0.4.0+1
+  path_provider: ^2.0.5
   turo_core:
     path: core_lib/
 
