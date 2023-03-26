@@ -9,10 +9,27 @@ void main() {
     'name': 'TURO',
   };
 
-  final file = File('data.json');
+  final file = File('assets/data.json');
   file.writeAsStringSync(json.encode(data));
 
   final jsonString = file.readAsStringSync();
+  final result = json.decode(jsonString);
+
+  /*
+  print(result['ip']);
+  print(result['bridgePort']);
+  print(result['name']);
+   */
+
+  read();
+}
+
+
+
+void read() {
+  final file = File('assets/data.json');
+  final jsonString = file.readAsStringSync();
+
   final result = json.decode(jsonString);
 
   print(result['ip']);

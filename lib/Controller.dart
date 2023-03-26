@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_joystick/flutter_joystick.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:appui/Configure.dart';
 import 'package:appui/AutoDriving.dart';
 import 'package:turo_core/turo_core.dart';
@@ -18,14 +19,9 @@ void main() {
 const ballSize = 20.0;
 const step = 10.0;
 
-Future<RosBridge> bridge() async {
-  final file = File('data.json');
-  final jsonString = file.readAsStringSync();
-  final result = json.decode(jsonString);
-
-  final _ros = RosBridge(result['ip'], result['bridgePort']);
-
-  return _ros;
+Future<Map<String, dynamic>> bridge() async {
+  String jsonString = await rootBundle.loadString('assets/data.json');
+  return json.decode(jsonString);
 }
 
 class JoystickView extends StatelessWidget{
@@ -48,7 +44,7 @@ class TwoJoystick extends StatefulWidget {
   _TwoJoystickState createState() => _TwoJoystickState();
 }
 
-class _TwoJoystickState extends State<TwoJoystick>{
+class _TwoJoystickState extends State<TwoJoystick> {
   @override
   void initState() {
     super.initState();
@@ -78,10 +74,14 @@ class _TwoJoystickState extends State<TwoJoystick>{
     super.didChangeDependencies();
   }
 
-  @override
-  final _ros = bridge();
 
+  @override
   Widget build(BuildContext context) {
+    //final result = bridge();
+    //Map<String, dynamic> data = await loadAsset();
+    //final ros = RosBridge(result['ip'], result['bridgePort']);
+    //final ros = RosBridge('10.10.30.59', 8080);
+
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
 
@@ -124,21 +124,28 @@ class _TwoJoystickState extends State<TwoJoystick>{
                     // adjust the y value according to the left joystick
 
                     _y = max(0, min(_y + step * details.y * sin(pi / 4), MediaQuery.of(context).size.height));
-                    if(_x == 1) {
+                    if(details.y < 0 && details.y <= -0.75 && details.x >= -0.75 || details.y < 0 && details.y <= -0.75 && details.x <= 0.75) {
                       /// move forward
                       /// TODO: Send the car a message, to move forward
-
-                    } else if(_x == 0) {
+                      //ros.setVelocity(-details.y, 0, 0);
+                      print('-----------------------${-details.y}');
+                    } else if(details.x < 0 && details.y <= 0 && details.x >= -0.75 || details.y < 0 && details.y <= -0.75 && details.x <= 0.75) {
                       /// move left
                       /// TODO: Send the car a message, to move left
-                    } else if(_x == 1) {
+                      //ros.setVelocity(0, -details.x, 0);
+                      print('+++++++++++++++++++++++${-details.x}');
+                    } else if(details.y > 0 && details.x >= -0.75 && details.x < 0) {
                       /// move back
                       /// TODO: Send the car a message, to move back
-                    } else if(_x == 1) {
+                      //ros.setVelocity(-details.y, 0, 0);
+                      print('//////////////////////${-details.y}');
+                    } else if(details.x > 0) {
                       /// move right
                       /// TODO: Send the car a message, to move right
+                      //ros.setVelocity(0, -details.x, 0);
+                      print('§§§§§§§§§§§§§§§§§§§§§§§${-details.x}');
                     }
-                    print('Left Joystick ${details.y}');
+                    print('Left Joystick: y: ${details.y}, x: ${details.x}');
                   });
                 },
                 child: Container(

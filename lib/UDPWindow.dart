@@ -14,7 +14,7 @@ Future<void> printCar(HeloTuroData car) async {
     'name': car.name,
   };
 
-  final file = File('data.json');
+  final file = File('assets/data.json');
   file.writeAsStringSync(json.encode(data));
 }
 
