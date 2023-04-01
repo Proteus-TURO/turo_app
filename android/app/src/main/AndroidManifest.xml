@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.appui">
    <application
-        android:label="appui"
+        android:label="TURO Drive"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

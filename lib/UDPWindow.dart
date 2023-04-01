@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:turo_core/turo_core.dart';
 import 'Controller.dart';
-import 'dart:io';
-import 'dart:convert';
 
-Future<void> printCar(HeloTuroData car) async {
-  print(car.name);
-  final _ros = RosBridge(car.ip, car.bridgePort);
-  final data = {
-    'ip': car.ip,
-    'bridgePort': car.bridgePort,
-    'name': car.name,
-  };
-
-  final file = File('assets/data.json');
-  file.writeAsStringSync(json.encode(data));
+Future<void> selectCar(BuildContext context, HeloTuroData car) async {
+  var pref = await SharedPreferences.getInstance();
+  await pref.setString("ip", car.ip);
+  await pref.setString("name", car.name);
+  await pref.setInt("bridgePort", car.bridgePort);
+  await pref.setInt("videoStreamPort", car.videStreamPort);
+  Navigator.push(
+      context, MaterialPageRoute(builder: (context) => const JoystickView()));
 }
 
 class UDPWindow extends StatelessWidget {
@@ -43,20 +39,16 @@ class _UDPState extends State<UDP> {
   void initState() {
     super.initState();
     // Set the portrait mode here
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
 
   @override
   void dispose() {
     super.dispose();
     // Release the portrait mode here
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
 
   @override
@@ -81,19 +73,24 @@ class _UDPState extends State<UDP> {
                 ),
               ),
             ),
-            const Expanded(child:
-            HeloTuroReceiver(printCar),
+            const Expanded(
+              child: HeloTuroReceiver(selectCar),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const JoystickView()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const JoystickView()));
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.black),
-                minimumSize: MaterialStateProperty.all(Size(currentWidth / 2, currentHeight / 17)),
+                minimumSize: MaterialStateProperty.all(
+                    Size(currentWidth / 2, currentHeight / 17)),
               ),
               child: const Text('Start driving'),
             ),
+            Padding(padding: EdgeInsets.only(bottom: currentHeight / 30))
           ],
         ),
       ),
